@@ -1,6 +1,6 @@
-# Simple Go Keylogger
+# Windows - Simple Go Keylogger
 
-A simple keylogger written in Golang for educational purposes. Captures US keyboard input and logs it to a local file.
+A simple Windows keylogger written in Pure Golang for educational purposes. Captures US keyboard input and logs it to a local file.
 NOTE: This currently only works for the Windows OS
 
 ## Usage
