@@ -8,7 +8,7 @@ var (
 )
 
 // isKeyPressed checks if the specified key is currently pressed
-func isKeyPressed(key_address int) bool {
-	result, _, _ := getAsyncKeyState.Call(uintptr(key_address))
+func isKeyPressed(virtualKeyCode int) bool {
+	result, _, _ := getAsyncKeyState.Call(uintptr(virtualKeyCode))
 	return result&0x8000 != 0
 }

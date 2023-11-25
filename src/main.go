@@ -3,7 +3,6 @@ package main
 import (
 	"os"
 	"syscall"
-	"fmt"
 )
 
 type Message struct {
@@ -24,7 +23,7 @@ var contentBuffer string = ""
 func main() {
 	// Attaching keyboard event hook
 	SetHook(customCallbackOnKeypress)
-
+	
 	// Setting up variables for looped keyboard event checking
 	var msg = MessageSetup()
 
@@ -45,21 +44,21 @@ func main() {
 	select {}
 }
 
-func customCallbackOnKeypress(pressedKeys []uint32) {
-	// This has been put in place so that the slices where there are no keys (i.e all are KEY_UP) are not shown --> Only shows pressed keys @ any time
-	if len(pressedKeys) != 0 {
-		fmt.Println(pressedKeys)
-	}
+func customCallbackOnKeypress(pressedKey []uint32) {
+	
+	// This function is run everytime a key event occurs >>> This can be a KEY_DOWN or a KEY_UP event.
 
-	// NOTE: NEED TO FIX THIS SO THAT BACKSPACE ON EMPTY FILE DOES NOT CAUSE ISSUES
 
-	// ALSO NEED TO FIX --> DOUBLE PRESSING KEYS AS THEY STAY IN PRESSED KEYS
 
-	for _, key := range pressedKeys {
-		// Updating the contentBuffer to include latest key press
-		contentBuffer += fmt.Sprintf("%c", key)
-	}
 
-	// Write content to the file
-	os.WriteFile(savingPath, []byte(contentBuffer), 0644)
+
+
+	// for _, key := range pressedKeys {
+	// 	// Updating the contentBuffer to include latest key press
+	// 	contentBuffer += fmt.Sprintf("%c", key)
+	// }
+
+	// // Write content to the file
+	// os.WriteFile(savingPath, []byte(contentBuffer), 0644)
+	
 }

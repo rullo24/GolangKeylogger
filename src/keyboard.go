@@ -4,6 +4,7 @@ import (
 	"syscall"
 	"unsafe"
 	"golang.org/x/sys/windows"
+	"fmt"
 )
 
 // CallbackFunc is the type definition for the callback function
@@ -44,6 +45,7 @@ var (
 	hookHandle uintptr
 	currentlyPressedKeys []uint32
 	callbackFunc CallbackFunc
+	shiftPressed bool
 )
 
 // SetHook sets up the keyboard hook
@@ -67,15 +69,27 @@ func _keyboardCallback(nCode int, wParam uintptr, lParam uintptr) uintptr {
 		kbdStruct := (*KBDLLHOOKSTRUCT)(unsafe.Pointer(lParam))
 
 		// Check if the key is pressed (wParam can be WM_KEYDOWN or WM_SYSKEYDOWN)
-		if wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN {
-			// Check if the key is not already in the pressedKeys slice
-			if !contains(currentlyPressedKeys, kbdStruct.VkCode) {
-				// Add the key to the pressedKeys slice
-				currentlyPressedKeys = append(currentlyPressedKeys, kbdStruct.VkCode)
+		if wParam == WM_KEYDOWN {
+			// Turning the Shift Modifier On
+			if kbdStruct.VkCode == 160 || kbdStruct.VkCode == 161 {
+				shiftPressed = true
 			}
-		} else if wParam == WM_KEYUP || wParam == WM_SYSKEYUP {
-			// Remove the key from the pressedKeys slice
-			currentlyPressedKeys = remove(currentlyPressedKeys, kbdStruct.VkCode)
+
+			// Checking if the key that has just been pressed is a key on the keyboard (excluding nums and letters)
+			printableKeys := keyModifierMap[int(kbdStruct.VkCode)]
+
+			// Varying output key based on the shift key modifier
+			if shiftPressed {
+				fmt.Printf("%c", printableKeys.ModifiedKey)
+			} else {
+				fmt.Printf("%c", printableKeys.BaseKey)
+			}
+
+		} else if wParam == WM_KEYUP {
+			// Setting the Shift Multiplier Off
+			if kbdStruct.VkCode == 160 || kbdStruct.VkCode == 161 {
+				shiftPressed = false
+			}
 		}
 
 		// Running a function of your choosing
