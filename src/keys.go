@@ -5,8 +5,9 @@ type keyModifierPair struct {
 	ModifiedKey rune
 }
 
-// Modifier Key Codes {virtualKeyCode: KeyPair}
+// Modifier Key Codes {virtualKeyCode: KeyPair} --> Based on US Keyboard Layout
 var keyModifierMap = map[int]keyModifierPair {
+	8: {8, 8}, // virtual key code for delete key
 	9: {'\t', '\t'}, // virtual key code for tab
 	13: {'\n', '\n'}, // virtual key code for return (next line)
 	32:  {' ', ' '}, // virtual key code for spacebar

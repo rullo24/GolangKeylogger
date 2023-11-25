@@ -4,7 +4,6 @@ import (
 	"syscall"
 	"unsafe"
 	"golang.org/x/sys/windows"
-	"fmt"
 )
 
 // CallbackFunc is the type definition for the callback function
@@ -43,7 +42,6 @@ var (
 
 var (
 	hookHandle uintptr
-	currentlyPressedKeys []uint32
 	callbackFunc CallbackFunc
 	shiftPressed bool
 )
@@ -65,7 +63,11 @@ func Unhook() {
 
 // _keyboardCallback is the callback function for the keyboard hook
 func _keyboardCallback(nCode int, wParam uintptr, lParam uintptr) uintptr {
+
 	if nCode == HC_ACTION {
+		// Setting keyToSend variable to NULL >>> NOTE: NULL = 0 Virtual Key Code
+		var keyToSend rune = 0
+
 		kbdStruct := (*KBDLLHOOKSTRUCT)(unsafe.Pointer(lParam))
 
 		// Check if the key is pressed (wParam can be WM_KEYDOWN or WM_SYSKEYDOWN)
@@ -80,9 +82,9 @@ func _keyboardCallback(nCode int, wParam uintptr, lParam uintptr) uintptr {
 
 			// Varying output key based on the shift key modifier
 			if shiftPressed {
-				fmt.Printf("%c", printableKeys.ModifiedKey)
+				keyToSend = printableKeys.ModifiedKey
 			} else {
-				fmt.Printf("%c", printableKeys.BaseKey)
+				keyToSend = printableKeys.BaseKey
 			}
 
 		} else if wParam == WM_KEYUP {
@@ -93,7 +95,7 @@ func _keyboardCallback(nCode int, wParam uintptr, lParam uintptr) uintptr {
 		}
 
 		// Running a function of your choosing
-		callbackFunc(currentlyPressedKeys)
+		callbackFunc([]uint32{uint32(keyToSend)})
 	}
 
 	// Call the next hook in the chain using CallNextHookEx

@@ -6,6 +6,6 @@ import (
 
 func main() {
 	// Executing the command to kill the keylogger program
-	cmd := exec.Command("taskkill", "/F", "/IM", "RC_keylogger.exe")
+	cmd := exec.Command("taskkill", "/F", "/IM", "keylog.exe")
 	cmd.Run()
 }
