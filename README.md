@@ -10,6 +10,11 @@ NOTE: This currently only works for the Windows OS
 - Press `Ctrl+C` to stop the keylogger (if run in a terminal).
     - NOTE: Can be run w/o a terminal (refer to top of main.go file)
 
+## Building
+
+To build this program, certain flags are required to ensure that the terminal window is hidden upon launch. To build the program, head to the "src" folder and input the following command:
+    --> "go build -ldflags -H=windowsgui"
+
 ## About
 
 After searching extensively online, I couldn't find a comprehensive explanation of how to capture keypresses without importing external modules in Golang. 
